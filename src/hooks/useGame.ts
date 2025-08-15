@@ -198,14 +198,25 @@
         const saved = localStorage.getItem("evolution-clicker-game");
         if (!saved) throw new Error("no save");
         const parsed = JSON.parse(saved);
+        // Sempre força o stageName correto, mesmo se o save for antigo
+        const stage = typeof parsed.stage === "number" ? parsed.stage : 0;
+        // Atualiza nomes dos upgrades a partir do array stageUpgrades
+        const allUpgrades: Upgrade[] = parsed.upgrades.map((u: any) => {
+          // Procura upgrade pelo id em todos os stageUpgrades
+          const correct = stageUpgrades.flat().find((su) => su.id === u.id);
+          return {
+            ...u,
+            name: correct ? correct.name : u.name,
+            cost: new FixedPrecision(u.cost),
+          };
+        });
         return {
           ...parsed,
+          stage,
+          stageName: stages[stage],
           resource: new FixedPrecision(parsed.resource),
           energy: new FixedPrecision(parsed.energy),
-          upgrades: parsed.upgrades.map((u: any) => ({
-            ...u,
-            cost: new FixedPrecision(u.cost),
-          })),
+          upgrades: allUpgrades,
           prestigePoints: parsed.prestigePoints || 0,
           completedMissions: parsed.completedMissions || [],
           clickCount: parsed.clickCount || 0,
