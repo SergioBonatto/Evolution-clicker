@@ -2,55 +2,54 @@
   import FixedPrecision from "fixed-precision";
   import type { GameState, Upgrade } from "../types/game";
 
-  // Estágios da evolução
+  // Evolution stages
   const stages = [
-    "Moléculas básicas",
-    "Vírus",
-    "Bactéria",
-    "Protozoário",
-    "Organismo multicelular simples",
-    "Organismo complexo",
-    "Tribo / sociedade primitiva",
-    "Civilização avançada",
-    "Era industrial",
-    "Era tecnológica",
-    "Exploração espacial",
-    "Colonização galáctica",
+    "Basic Molecules",
+    "Virus",
+    "Bacteria",
+    "Protozoan",
+    "Simple Multicellular Organism",
+    "Complex Organism",
+    "Tribe / Primitive Society",
+    "Advanced Civilization",
+    "Industrial Era",
+    "Technological Era",
+    "Space Exploration",
+    "Galactic Colonization",
   ];
 
-  // Requisitos de evolução: recurso necessário e quantidade mínima
-  // Requisitos de evolução: recurso necessário e quantidade mínima (curva mais agressiva)
+  // Evolution requirements: required resource and minimum amount (more aggressive curve)
   const evolutionRequirements = [
-    { resourceName: "Moléculas", min: 1e3 },
-    { resourceName: "Vírus", min: 2e4 },
-    { resourceName: "Bactérias", min: 5e5 },
-    { resourceName: "Protozoários", min: 2e7 },
-    { resourceName: "Multicelulares simples", min: 1e9 },
-    { resourceName: "Organismos complexos", min: 5e10 },
-    { resourceName: "População / aldeias", min: 2e12 },
-    { resourceName: "Cidades / tecnologia", min: 1e14 },
-    { resourceName: "Indústrias / pesquisa", min: 5e15 },
-    { resourceName: "Tecnologia avançada / recursos", min: 2e17 },
-    { resourceName: "Colônias / energia / tecnologia", min: 1e19 },
+    { resourceName: "Molecules", min: 1e3 },
+    { resourceName: "Viruses", min: 2e4 },
+    { resourceName: "Bacteria", min: 5e5 },
+    { resourceName: "Protozoans", min: 2e7 },
+    { resourceName: "Simple Multicellular", min: 1e9 },
+    { resourceName: "Complex Organisms", min: 5e10 },
+    { resourceName: "Population / Villages", min: 2e12 },
+    { resourceName: "Cities / Technology", min: 1e14 },
+    { resourceName: "Industries / Research", min: 5e15 },
+    { resourceName: "Advanced Technology / Resources", min: 2e17 },
+    { resourceName: "Colonies / Energy / Technology", min: 1e19 },
   ];
 
-  // Nome do recurso produzido em cada estágio
+  // Name of the resource produced at each stage
   const producedResources = [
-    "Moléculas",
-    "Vírus",
-    "Bactérias",
-    "Protozoários",
-    "Multicelulares simples",
-    "Organismos complexos",
-    "População",
-    "Cidades",
-    "Indústrias",
-    "Tecnologia avançada",
-    "Colônias",
-    "Energia Galáctica",
+    "Molecules",
+    "Viruses",
+    "Bacteria",
+    "Protozoans",
+    "Simple Multicellular",
+    "Complex Organisms",
+    "Population",
+    "Cities",
+    "Industries",
+    "Advanced Technology",
+    "Colonies",
+    "Galactic Energy",
   ];
 
-  // Temas por estágio para feedback visual
+  // Stage themes for visual feedback
   const stageThemes = [
     "primordial",
     "viral",
@@ -66,134 +65,134 @@
     "galactic",
   ];
 
-  // Upgrades base por estágio
+  // Base upgrades per stage
   const stageUpgrades: Upgrade[][] = [
     [
-      { id: "protein_synthesis", name: "Síntese de Proteínas", baseCost: 10, cost: new FixedPrecision(10), multiplier: 1.1, quantity: 0 },
-      { id: "enzyme_catalyst", name: "Catalisador Enzimático", baseCost: 50, cost: new FixedPrecision(50), multiplier: 1.25, quantity: 0 },
-      { id: "self_replication", name: "Auto-replicação", baseCost: 200, cost: new FixedPrecision(200), multiplier: 1.5, quantity: 0 },
+      { id: "protein_synthesis", name: "Protein Synthesis", baseCost: 10, cost: new FixedPrecision(10), multiplier: 1.1, quantity: 0 },
+      { id: "enzyme_catalyst", name: "Enzyme Catalyst", baseCost: 50, cost: new FixedPrecision(50), multiplier: 1.25, quantity: 0 },
+      { id: "self_replication", name: "Self-Replication", baseCost: 200, cost: new FixedPrecision(200), multiplier: 1.5, quantity: 0 },
     ],
     [
-      { id: "viral_capsid", name: "Capsídeo Viral", baseCost: 1_000, cost: new FixedPrecision(1_000), multiplier: 2, quantity: 0 },
-      { id: "rna_efficiency", name: "RNA Eficiente", baseCost: 3_000, cost: new FixedPrecision(3_000), multiplier: 4, quantity: 0 },
-      { id: "viral_replication", name: "Replicação Viral", baseCost: 10_000, cost: new FixedPrecision(10_000), multiplier: 5, quantity: 0 },
+      { id: "viral_capsid", name: "Viral Capsid", baseCost: 1_000, cost: new FixedPrecision(1_000), multiplier: 2, quantity: 0 },
+      { id: "rna_efficiency", name: "Efficient RNA", baseCost: 3_000, cost: new FixedPrecision(3_000), multiplier: 4, quantity: 0 },
+      { id: "viral_replication", name: "Viral Replication", baseCost: 10_000, cost: new FixedPrecision(10_000), multiplier: 5, quantity: 0 },
     ],
     [
-      { id: "cell_wall", name: "Parede Celular", baseCost: 10_000, cost: new FixedPrecision(10_000), multiplier: 10, quantity: 0 },
-      { id: "flagellum", name: "Flagelo", baseCost: 30_000, cost: new FixedPrecision(30_000), multiplier: 20, quantity: 0 },
-      { id: "bacterial_colony", name: "Colônia Bacteriana", baseCost: 100_000, cost: new FixedPrecision(100_000), multiplier: 50, quantity: 0 },
+      { id: "cell_wall", name: "Cell Wall", baseCost: 10_000, cost: new FixedPrecision(10_000), multiplier: 10, quantity: 0 },
+      { id: "flagellum", name: "Flagellum", baseCost: 30_000, cost: new FixedPrecision(30_000), multiplier: 20, quantity: 0 },
+      { id: "bacterial_colony", name: "Bacterial Colony", baseCost: 100_000, cost: new FixedPrecision(100_000), multiplier: 50, quantity: 0 },
     ],
     [
-      { id: "protozoan_membrane", name: "Membrana Protozoária", baseCost: 200_000, cost: new FixedPrecision(200_000), multiplier: 60, quantity: 0 },
-      { id: "cilia_movement", name: "Movimento por Cílios", baseCost: 500_000, cost: new FixedPrecision(500_000), multiplier: 120, quantity: 0 },
-      { id: "protozoan_colony", name: "Colônia de Protozoários", baseCost: 1_000_000, cost: new FixedPrecision(1_000_000), multiplier: 250, quantity: 0 },
+      { id: "protozoan_membrane", name: "Protozoan Membrane", baseCost: 200_000, cost: new FixedPrecision(200_000), multiplier: 60, quantity: 0 },
+      { id: "cilia_movement", name: "Cilia Movement", baseCost: 500_000, cost: new FixedPrecision(500_000), multiplier: 120, quantity: 0 },
+      { id: "protozoan_colony", name: "Protozoan Colony", baseCost: 1_000_000, cost: new FixedPrecision(1_000_000), multiplier: 250, quantity: 0 },
     ],
     [
-      { id: "simple_multicellularity", name: "Multicelularidade Simples", baseCost: 2_000_000, cost: new FixedPrecision(2_000_000), multiplier: 400, quantity: 0 },
-      { id: "cell_specialization", name: "Especialização Celular", baseCost: 5_000_000, cost: new FixedPrecision(5_000_000), multiplier: 800, quantity: 0 },
-      { id: "primitive_organ", name: "Órgão Primitivo", baseCost: 10_000_000, cost: new FixedPrecision(10_000_000), multiplier: 1_500, quantity: 0 },
+      { id: "simple_multicellularity", name: "Simple Multicellularity", baseCost: 2_000_000, cost: new FixedPrecision(2_000_000), multiplier: 400, quantity: 0 },
+      { id: "cell_specialization", name: "Cell Specialization", baseCost: 5_000_000, cost: new FixedPrecision(5_000_000), multiplier: 800, quantity: 0 },
+      { id: "primitive_organ", name: "Primitive Organ", baseCost: 10_000_000, cost: new FixedPrecision(10_000_000), multiplier: 1_500, quantity: 0 },
     ],
     [
-      { id: "complex_organism", name: "Organismo Complexo", baseCost: 20_000_000, cost: new FixedPrecision(20_000_000), multiplier: 2_500, quantity: 0 },
-      { id: "nervous_system", name: "Sistema Nervoso", baseCost: 50_000_000, cost: new FixedPrecision(50_000_000), multiplier: 5_000, quantity: 0 },
-      { id: "reproduction", name: "Reprodução Sexual", baseCost: 100_000_000, cost: new FixedPrecision(100_000_000), multiplier: 10_000, quantity: 0 },
+      { id: "complex_organism", name: "Complex Organism", baseCost: 20_000_000, cost: new FixedPrecision(20_000_000), multiplier: 2_500, quantity: 0 },
+      { id: "nervous_system", name: "Nervous System", baseCost: 50_000_000, cost: new FixedPrecision(50_000_000), multiplier: 5_000, quantity: 0 },
+      { id: "reproduction", name: "Sexual Reproduction", baseCost: 100_000_000, cost: new FixedPrecision(100_000_000), multiplier: 10_000, quantity: 0 },
     ],
     [
-      { id: "tribe_formation", name: "Formação de Tribos", baseCost: 200_000_000, cost: new FixedPrecision(200_000_000), multiplier: 20_000, quantity: 0 },
-      { id: "language", name: "Linguagem", baseCost: 500_000_000, cost: new FixedPrecision(500_000_000), multiplier: 40_000, quantity: 0 },
-      { id: "tool_making", name: "Fabricação de Ferramentas", baseCost: 1_000_000_000, cost: new FixedPrecision(1_000_000_000), multiplier: 80_000, quantity: 0 },
+      { id: "tribe_formation", name: "Tribe Formation", baseCost: 200_000_000, cost: new FixedPrecision(200_000_000), multiplier: 20_000, quantity: 0 },
+      { id: "language", name: "Language", baseCost: 500_000_000, cost: new FixedPrecision(500_000_000), multiplier: 40_000, quantity: 0 },
+      { id: "tool_making", name: "Tool Making", baseCost: 1_000_000_000, cost: new FixedPrecision(1_000_000_000), multiplier: 80_000, quantity: 0 },
     ],
     [
-      { id: "urbanization", name: "Urbanização", baseCost: 2_000_000_000, cost: new FixedPrecision(2_000_000_000), multiplier: 150_000, quantity: 0 },
-      { id: "writing", name: "Escrita", baseCost: 5_000_000_000, cost: new FixedPrecision(5_000_000_000), multiplier: 300_000, quantity: 0 },
-      { id: "science", name: "Ciência", baseCost: 10_000_000_000, cost: new FixedPrecision(10_000_000_000), multiplier: 600_000, quantity: 0 },
+      { id: "urbanization", name: "Urbanization", baseCost: 2_000_000_000, cost: new FixedPrecision(2_000_000_000), multiplier: 150_000, quantity: 0 },
+      { id: "writing", name: "Writing", baseCost: 5_000_000_000, cost: new FixedPrecision(5_000_000_000), multiplier: 300_000, quantity: 0 },
+      { id: "science", name: "Science", baseCost: 10_000_000_000, cost: new FixedPrecision(10_000_000_000), multiplier: 600_000, quantity: 0 },
     ],
     [
-      { id: "factory", name: "Fábrica", baseCost: 20_000_000_000, cost: new FixedPrecision(20_000_000_000), multiplier: 1_200_000, quantity: 0 },
-      { id: "steam_engine", name: "Máquina a Vapor", baseCost: 50_000_000_000, cost: new FixedPrecision(50_000_000_000), multiplier: 2_500_000, quantity: 0 },
-      { id: "mass_production", name: "Produção em Massa", baseCost: 100_000_000_000, cost: new FixedPrecision(100_000_000_000), multiplier: 5_000_000, quantity: 0 },
+      { id: "factory", name: "Factory", baseCost: 20_000_000_000, cost: new FixedPrecision(20_000_000_000), multiplier: 1_200_000, quantity: 0 },
+      { id: "steam_engine", name: "Steam Engine", baseCost: 50_000_000_000, cost: new FixedPrecision(50_000_000_000), multiplier: 2_500_000, quantity: 0 },
+      { id: "mass_production", name: "Mass Production", baseCost: 100_000_000_000, cost: new FixedPrecision(100_000_000_000), multiplier: 5_000_000, quantity: 0 },
     ],
     [
-      { id: "computer", name: "Computador", baseCost: 200_000_000_000, cost: new FixedPrecision(200_000_000_000), multiplier: 10_000_000, quantity: 0 },
+      { id: "computer", name: "Computer", baseCost: 200_000_000_000, cost: new FixedPrecision(200_000_000_000), multiplier: 10_000_000, quantity: 0 },
       { id: "internet", name: "Internet", baseCost: 500_000_000_000, cost: new FixedPrecision(500_000_000_000), multiplier: 20_000_000, quantity: 0 },
-      { id: "ai_research", name: "Pesquisa em IA", baseCost: 1_000_000_000_000, cost: new FixedPrecision(1_000_000_000_000), multiplier: 40_000_000, quantity: 0 },
+      { id: "ai_research", name: "AI Research", baseCost: 1_000_000_000_000, cost: new FixedPrecision(1_000_000_000_000), multiplier: 40_000_000, quantity: 0 },
     ],
     [
-      { id: "rocket_science", name: "Ciência de Foguetes", baseCost: 2_000_000_000_000, cost: new FixedPrecision(2_000_000_000_000), multiplier: 80_000_000, quantity: 0 },
-      { id: "space_station", name: "Estação Espacial", baseCost: 5_000_000_000_000, cost: new FixedPrecision(5_000_000_000_000), multiplier: 160_000_000, quantity: 0 },
-      { id: "interstellar_probe", name: "Sonda Interestelar", baseCost: 10_000_000_000_000, cost: new FixedPrecision(10_000_000_000_000), multiplier: 320_000_000, quantity: 0 },
+      { id: "rocket_science", name: "Rocket Science", baseCost: 2_000_000_000_000, cost: new FixedPrecision(2_000_000_000_000), multiplier: 80_000_000, quantity: 0 },
+      { id: "space_station", name: "Space Station", baseCost: 5_000_000_000_000, cost: new FixedPrecision(5_000_000_000_000), multiplier: 160_000_000, quantity: 0 },
+      { id: "interstellar_probe", name: "Interstellar Probe", baseCost: 10_000_000_000_000, cost: new FixedPrecision(10_000_000_000_000), multiplier: 320_000_000, quantity: 0 },
     ],
     [
-      { id: "dyson_sphere", name: "Esfera de Dyson", baseCost: 10_000_000_000_000, cost: new FixedPrecision(10_000_000_000_000), multiplier: 1_000_000, quantity: 0 },
-      { id: "galactic_civilization", name: "Civilização Galáctica", baseCost: 50_000_000_000_000, cost: new FixedPrecision(50_000_000_000_000), multiplier: 5_000_000, quantity: 0 },
+      { id: "dyson_sphere", name: "Dyson Sphere", baseCost: 10_000_000_000_000, cost: new FixedPrecision(10_000_000_000_000), multiplier: 1_000_000, quantity: 0 },
+      { id: "galactic_civilization", name: "Galactic Civilization", baseCost: 50_000_000_000_000, cost: new FixedPrecision(50_000_000_000_000), multiplier: 5_000_000, quantity: 0 },
     ],
   ];
 
-  // Missões para engajamento
+  // Missions for engagement
   const missions = [
-    // Estágio 0 - Moléculas básicas
-    { id: "m1", stage: 0, description: "Coletar 500 Moléculas", requirement: { resource: 500 }, reward: { energy: 100 } },
-    { id: "m2", stage: 0, description: "Comprar 3 Sínteses de Proteínas", requirement: { upgrade: "protein_synthesis", quantity: 3 }, reward: { energy: 200 } },
-    { id: "m3", stage: 0, description: "Comprar 1 Catalisador Enzimático", requirement: { upgrade: "enzyme_catalyst", quantity: 1 }, reward: { evolutionPoints: 1 } },
+    // Stage 0 - Basic Molecules
+    { id: "m1", stage: 0, description: "Collect 500 Molecules", requirement: { resource: 500 }, reward: { energy: 100 } },
+    { id: "m2", stage: 0, description: "Buy 3 Protein Syntheses", requirement: { upgrade: "protein_synthesis", quantity: 3 }, reward: { energy: 200 } },
+    { id: "m3", stage: 0, description: "Buy 1 Enzyme Catalyst", requirement: { upgrade: "enzyme_catalyst", quantity: 1 }, reward: { evolutionPoints: 1 } },
 
-    // Estágio 1 - Vírus
-    { id: "m4", stage: 1, description: "Coletar 5.000 Vírus", requirement: { resource: 5000 }, reward: { energy: 1_000 } },
-    { id: "m5", stage: 1, description: "Comprar 5 Capsídeos Virais", requirement: { upgrade: "viral_capsid", quantity: 5 }, reward: { evolutionPoints: 2 } },
-    { id: "m6", stage: 1, description: "Comprar 2 RNAs Eficientes", requirement: { upgrade: "rna_efficiency", quantity: 2 }, reward: { energy: 2_000 } },
+    // Stage 1 - Virus
+    { id: "m4", stage: 1, description: "Collect 5,000 Viruses", requirement: { resource: 5000 }, reward: { energy: 1_000 } },
+    { id: "m5", stage: 1, description: "Buy 5 Viral Capsids", requirement: { upgrade: "viral_capsid", quantity: 5 }, reward: { evolutionPoints: 2 } },
+    { id: "m6", stage: 1, description: "Buy 2 Efficient RNAs", requirement: { upgrade: "rna_efficiency", quantity: 2 }, reward: { energy: 2_000 } },
 
-    // Estágio 2 - Bactéria
-    { id: "m7", stage: 2, description: "Atingir 10.000 Bactérias", requirement: { resource: 10_000 }, reward: { energy: 5_000 } },
-    { id: "m8", stage: 2, description: "Comprar 3 Paredes Celulares", requirement: { upgrade: "cell_wall", quantity: 3 }, reward: { evolutionPoints: 2 } },
-    { id: "m9", stage: 2, description: "Comprar 2 Flagelos", requirement: { upgrade: "flagellum", quantity: 2 }, reward: { energy: 10_000 } },
+    // Stage 2 - Bacteria
+    { id: "m7", stage: 2, description: "Reach 10,000 Bacteria", requirement: { resource: 10_000 }, reward: { energy: 5_000 } },
+    { id: "m8", stage: 2, description: "Buy 3 Cell Walls", requirement: { upgrade: "cell_wall", quantity: 3 }, reward: { evolutionPoints: 2 } },
+    { id: "m9", stage: 2, description: "Buy 2 Flagella", requirement: { upgrade: "flagellum", quantity: 2 }, reward: { energy: 10_000 } },
 
-    // Estágio 3 - Protozoário
-    { id: "m10", stage: 3, description: "Coletar 100.000 Protozoários", requirement: { resource: 100_000 }, reward: { energy: 50_000 } },
-    { id: "m11", stage: 3, description: "Comprar 2 Membranas Protozoárias", requirement: { upgrade: "protozoan_membrane", quantity: 2 }, reward: { evolutionPoints: 3 } },
-    { id: "m12", stage: 3, description: "Comprar 1 Colônia de Protozoários", requirement: { upgrade: "protozoan_colony", quantity: 1 }, reward: { energy: 100_000 } },
+    // Stage 3 - Protozoan
+    { id: "m10", stage: 3, description: "Collect 100,000 Protozoans", requirement: { resource: 100_000 }, reward: { energy: 50_000 } },
+    { id: "m11", stage: 3, description: "Buy 2 Protozoan Membranes", requirement: { upgrade: "protozoan_membrane", quantity: 2 }, reward: { evolutionPoints: 3 } },
+    { id: "m12", stage: 3, description: "Buy 1 Protozoan Colony", requirement: { upgrade: "protozoan_colony", quantity: 1 }, reward: { energy: 100_000 } },
 
-    // Estágio 4 - Multicelulares simples
-    { id: "m13", stage: 4, description: "Atingir 1.000.000 Multicelulares simples", requirement: { resource: 1_000_000 }, reward: { energy: 200_000 } },
-    { id: "m14", stage: 4, description: "Comprar 2 Multicelularidades Simples", requirement: { upgrade: "simple_multicellularity", quantity: 2 }, reward: { evolutionPoints: 4 } },
-    { id: "m15", stage: 4, description: "Comprar 1 Órgão Primitivo", requirement: { upgrade: "primitive_organ", quantity: 1 }, reward: { energy: 500_000 } },
+    // Stage 4 - Simple Multicellular
+    { id: "m13", stage: 4, description: "Reach 1,000,000 Simple Multicellular", requirement: { resource: 1_000_000 }, reward: { energy: 200_000 } },
+    { id: "m14", stage: 4, description: "Buy 2 Simple Multicellularities", requirement: { upgrade: "simple_multicellularity", quantity: 2 }, reward: { evolutionPoints: 4 } },
+    { id: "m15", stage: 4, description: "Buy 1 Primitive Organ", requirement: { upgrade: "primitive_organ", quantity: 1 }, reward: { energy: 500_000 } },
 
-    // Estágio 5 - Organismo complexo
-    { id: "m16", stage: 5, description: "Coletar 10.000.000 Organismos complexos", requirement: { resource: 10_000_000 }, reward: { energy: 1_000_000 } },
-    { id: "m17", stage: 5, description: "Comprar 2 Organismos Complexos", requirement: { upgrade: "complex_organism", quantity: 2 }, reward: { evolutionPoints: 5 } },
-    { id: "m18", stage: 5, description: "Comprar 1 Sistema Nervoso", requirement: { upgrade: "nervous_system", quantity: 1 }, reward: { energy: 2_000_000 } },
+    // Stage 5 - Complex Organism
+    { id: "m16", stage: 5, description: "Collect 10,000,000 Complex Organisms", requirement: { resource: 10_000_000 }, reward: { energy: 1_000_000 } },
+    { id: "m17", stage: 5, description: "Buy 2 Complex Organisms", requirement: { upgrade: "complex_organism", quantity: 2 }, reward: { evolutionPoints: 5 } },
+    { id: "m18", stage: 5, description: "Buy 1 Nervous System", requirement: { upgrade: "nervous_system", quantity: 1 }, reward: { energy: 2_000_000 } },
 
-    // Estágio 6 - Tribo / sociedade primitiva
-    { id: "m19", stage: 6, description: "Atingir 100.000.000 de População", requirement: { resource: 100_000_000 }, reward: { energy: 5_000_000 } },
-    { id: "m20", stage: 6, description: "Comprar 2 Formaçãos de Tribos", requirement: { upgrade: "tribe_formation", quantity: 2 }, reward: { evolutionPoints: 6 } },
-    { id: "m21", stage: 6, description: "Comprar 1 Linguagem", requirement: { upgrade: "language", quantity: 1 }, reward: { energy: 10_000_000 } },
+    // Stage 6 - Tribe / Primitive Society
+    { id: "m19", stage: 6, description: "Reach 100,000,000 Population", requirement: { resource: 100_000_000 }, reward: { energy: 5_000_000 } },
+    { id: "m20", stage: 6, description: "Buy 2 Tribe Formations", requirement: { upgrade: "tribe_formation", quantity: 2 }, reward: { evolutionPoints: 6 } },
+    { id: "m21", stage: 6, description: "Buy 1 Language", requirement: { upgrade: "language", quantity: 1 }, reward: { energy: 10_000_000 } },
 
-    // Estágio 7 - Civilização avançada
-    { id: "m22", stage: 7, description: "Coletar 1.000.000.000 Cidades", requirement: { resource: 1_000_000_000 }, reward: { energy: 20_000_000 } },
-    { id: "m23", stage: 7, description: "Comprar 2 Urbanizações", requirement: { upgrade: "urbanization", quantity: 2 }, reward: { evolutionPoints: 7 } },
-    { id: "m24", stage: 7, description: "Comprar 1 Ciência", requirement: { upgrade: "science", quantity: 1 }, reward: { energy: 50_000_000 } },
+    // Stage 7 - Advanced Civilization
+    { id: "m22", stage: 7, description: "Collect 1,000,000,000 Cities", requirement: { resource: 1_000_000_000 }, reward: { energy: 20_000_000 } },
+    { id: "m23", stage: 7, description: "Buy 2 Urbanizations", requirement: { upgrade: "urbanization", quantity: 2 }, reward: { evolutionPoints: 7 } },
+    { id: "m24", stage: 7, description: "Buy 1 Science", requirement: { upgrade: "science", quantity: 1 }, reward: { energy: 50_000_000 } },
 
-    // Estágio 8 - Era industrial
-    { id: "m25", stage: 8, description: "Atingir 10.000.000.000 Indústrias", requirement: { resource: 10_000_000_000 }, reward: { energy: 100_000_000 } },
-    { id: "m26", stage: 8, description: "Comprar 2 Fábricas", requirement: { upgrade: "factory", quantity: 2 }, reward: { evolutionPoints: 8 } },
-    { id: "m27", stage: 8, description: "Comprar 1 Produção em Massa", requirement: { upgrade: "mass_production", quantity: 1 }, reward: { energy: 200_000_000 } },
+    // Stage 8 - Industrial Era
+    { id: "m25", stage: 8, description: "Reach 10,000,000,000 Industries", requirement: { resource: 10_000_000_000 }, reward: { energy: 100_000_000 } },
+    { id: "m26", stage: 8, description: "Buy 2 Factories", requirement: { upgrade: "factory", quantity: 2 }, reward: { evolutionPoints: 8 } },
+    { id: "m27", stage: 8, description: "Buy 1 Mass Production", requirement: { upgrade: "mass_production", quantity: 1 }, reward: { energy: 200_000_000 } },
 
-    // Estágio 9 - Era tecnológica
-    { id: "m28", stage: 9, description: "Coletar 100.000.000.000 Tecnologia Avançada", requirement: { resource: 100_000_000_000 }, reward: { energy: 500_000_000 } },
-    { id: "m29", stage: 9, description: "Comprar 2 Computadores", requirement: { upgrade: "computer", quantity: 2 }, reward: { evolutionPoints: 10 } },
-    { id: "m30", stage: 9, description: "Comprar 1 Pesquisa em IA", requirement: { upgrade: "ai_research", quantity: 1 }, reward: { energy: 1_000_000_000 } },
+    // Stage 9 - Technological Era
+    { id: "m28", stage: 9, description: "Collect 100,000,000,000 Advanced Technology", requirement: { resource: 100_000_000_000 }, reward: { energy: 500_000_000 } },
+    { id: "m29", stage: 9, description: "Buy 2 Computers", requirement: { upgrade: "computer", quantity: 2 }, reward: { evolutionPoints: 10 } },
+    { id: "m30", stage: 9, description: "Buy 1 AI Research", requirement: { upgrade: "ai_research", quantity: 1 }, reward: { energy: 1_000_000_000 } },
 
-    // Estágio 10 - Exploração espacial
-    { id: "m31", stage: 10, description: "Atingir 1.000.000.000.000 Colônias", requirement: { resource: 1_000_000_000_000 }, reward: { energy: 2_000_000_000 } },
-    { id: "m32", stage: 10, description: "Comprar 2 Ciências de Foguetes", requirement: { upgrade: "rocket_science", quantity: 2 }, reward: { evolutionPoints: 12 } },
-    { id: "m33", stage: 10, description: "Comprar 1 Sonda Interestelar", requirement: { upgrade: "interstellar_probe", quantity: 1 }, reward: { energy: 5_000_000_000 } },
+    // Stage 10 - Space Exploration
+    { id: "m31", stage: 10, description: "Reach 1,000,000,000,000 Colonies", requirement: { resource: 1_000_000_000_000 }, reward: { energy: 2_000_000_000 } },
+    { id: "m32", stage: 10, description: "Buy 2 Rocket Sciences", requirement: { upgrade: "rocket_science", quantity: 2 }, reward: { evolutionPoints: 12 } },
+    { id: "m33", stage: 10, description: "Buy 1 Interstellar Probe", requirement: { upgrade: "interstellar_probe", quantity: 1 }, reward: { energy: 5_000_000_000 } },
 
-    // Estágio 11 - Colonização galáctica
-    { id: "m34", stage: 11, description: "Coletar 10.000.000.000.000 Energia Galáctica", requirement: { resource: 10_000_000_000_000 }, reward: { energy: 10_000_000_000 } },
-    { id: "m35", stage: 11, description: "Comprar 1 Esfera de Dyson", requirement: { upgrade: "dyson_sphere", quantity: 1 }, reward: { evolutionPoints: 15 } },
-    { id: "m36", stage: 11, description: "Comprar 1 Civilização Galáctica", requirement: { upgrade: "galactic_civilization", quantity: 1 }, reward: { energy: 50_000_000_000 } },
+    // Stage 11 - Galactic Colonization
+    { id: "m34", stage: 11, description: "Collect 10,000,000,000,000 Galactic Energy", requirement: { resource: 10_000_000_000_000 }, reward: { energy: 10_000_000_000 } },
+    { id: "m35", stage: 11, description: "Buy 1 Dyson Sphere", requirement: { upgrade: "dyson_sphere", quantity: 1 }, reward: { evolutionPoints: 15 } },
+    { id: "m36", stage: 11, description: "Buy 1 Galactic Civilization", requirement: { upgrade: "galactic_civilization", quantity: 1 }, reward: { energy: 50_000_000_000 } },
   ];
 
   export const useGame = () => {
-    // Estado inicial
+    // Initial state
   function loadGameState(): GameState {
       try {
         const saved = localStorage.getItem("evolution-clicker-game");
@@ -228,7 +227,7 @@
 
   const [gameState, setGameState] = useState<GameState>(loadGameState());
 
-    // Salva progresso
+  // Save progress
     useEffect(() => {
       const toSave = {
         ...gameState,
@@ -243,28 +242,28 @@
       localStorage.setItem("evolution-clicker-game", JSON.stringify(toSave));
     }, [gameState]);
 
-    // Calcula multiplicador global
+  // Calculate global multiplier
     const getMultiplier = useMemo(() => {
       let mult = new FixedPrecision(1);
       for (const u of gameState.upgrades) {
         mult = mult.add(new FixedPrecision(u.multiplier - 1).mul(new FixedPrecision(u.quantity)));
       }
       mult = mult.add(new FixedPrecision(gameState.evolutionPoints).mul(new FixedPrecision(0.05)));
-      // Bônus de prestígio: +5% por ponto
+  // Prestige bonus: +5% per point
       mult = mult.mul(new FixedPrecision(1 + 0.05 * gameState.prestigePoints));
       return mult;
     }, [gameState.upgrades, gameState.evolutionPoints, gameState.prestigePoints]);
 
-    // Produção automática por segundo
+  // Auto production per second
     const autoProductionPerSecond = useMemo(() => {
       const totalAuto = gameState.upgrades.reduce((acc, u) => acc + u.quantity, 0);
       return new FixedPrecision(totalAuto)
         .mul(new FixedPrecision(1))
         .mul(getMultiplier)
-        .div(new FixedPrecision(2)); // Divisor ajustado para balanceamento
+        .div(new FixedPrecision(2)); // Adjusted divisor for balancing
     }, [getMultiplier, gameState.upgrades]);
 
-    // Produção por clique
+  // Production per click
     const produce = () => {
       const amount = new FixedPrecision(1).mul(getMultiplier);
       setGameState((prev) => ({
@@ -275,7 +274,7 @@
       }));
     };
 
-    // Produção automática
+  // Auto production
     useEffect(() => {
       const interval = setInterval(() => {
         if (autoProductionPerSecond.gt(new FixedPrecision(0))) {
@@ -285,11 +284,11 @@
             energy: new FixedPrecision(prev.energy).add(autoProductionPerSecond),
           }));
         }
-      }, 1000); // A cada segundo para progressão fluida
+  }, 1000); // Every second for smooth progression
       return () => clearInterval(interval);
     }, [autoProductionPerSecond]);
 
-    // Comprar upgrade
+  // Buy upgrade
     const buyUpgrade = (upgradeId: string) => {
       setGameState((prev) => {
         const upgrade = prev.upgrades.find((u) => u.id === upgradeId);
@@ -297,7 +296,7 @@
 
         const newQuantity = upgrade.quantity + 1;
         const baseCostFP = new FixedPrecision(upgrade.baseCost);
-        // Custo menos agressivo: base 2.5 com incremento linear
+  // Less aggressive cost: base 2.5 with linear increment
         const factor = Math.pow(2.5, newQuantity) * (1 + 0.1 * newQuantity);
         const newCost = baseCostFP.mul(new FixedPrecision(factor));
 
@@ -313,8 +312,8 @@
       });
     };
 
-    // Evoluir
-    // Checa se todas as missões da era atual estão completas
+  // Evolve
+  // Checks if all missions of the current era are complete
     const areEraMissionsComplete = (state: GameState) => {
       return missions.filter((m) => m.stage === state.stage).every((m) => state.completedMissions.includes(m.id));
     };
@@ -324,10 +323,10 @@
         if (prev.stage >= stages.length - 1) return prev;
         const req = evolutionRequirements[prev.stage];
         if (!req) return prev;
-        // Requisito de recurso mais agressivo
+  // More aggressive resource requirement
         const dynamicMin = req.min * Math.pow(3, prev.stage + 1);
         const reqMinFP = new FixedPrecision(dynamicMin);
-        // Exige missões completas
+  // Requires all missions complete
         if (!areEraMissionsComplete(prev)) return prev;
         if (new FixedPrecision(prev.resource).lt(reqMinFP)) return prev;
 
@@ -358,10 +357,10 @@
       });
     };
 
-    // Sistema de Prestígio
+  // Prestige system
     const prestige = () => {
       setGameState((prev) => {
-        if (prev.stage < 5) return prev; // Requer pelo menos estágio 5 para prestigiar
+  if (prev.stage < 5) return prev; // Requires at least stage 5 to prestige
         const prestigePointsGained = Math.floor(Math.log10(prev.energy.toNumber()) / 2);
         return {
           stage: 0,
@@ -377,7 +376,7 @@
       });
     };
 
-    // Completar missão
+  // Complete mission
   const completeMission = (missionId: string) => {
     setGameState((prev) => {
       if (prev.completedMissions.includes(missionId)) return prev;
@@ -404,7 +403,7 @@
     });
   };
 
-    // Agrupar upgrades por estágio
+  // Group upgrades by stage
     const upgradesByStage = useMemo(() => {
       const result: { stage: string; upgrades: Upgrade[] }[] = [];
       stages.forEach((stage, idx) => {
@@ -418,7 +417,7 @@
       return result;
     }, [gameState.upgrades]);
 
-    // Função para resetar o jogo completamente
+  // Function to completely reset the game
     const resetGame = () => {
       localStorage.removeItem("evolution-clicker-game");
       setGameState({
@@ -442,8 +441,8 @@
       prestige,
       completeMission,
       resetGame,
-      missions: missions.filter((m) => m.stage <= gameState.stage && !gameState.completedMissions.includes(m.id)),
-      producedResource: producedResources[gameState.stage] || "Recurso",
+  missions: missions.filter((m) => m.stage <= gameState.stage && !gameState.completedMissions.includes(m.id)),
+  producedResource: producedResources[gameState.stage] || "Resource",
       autoProduction: { perSecond: autoProductionPerSecond },
       upgradesByStage,
       stageTheme: stageThemes[gameState.stage] || "primordial",
