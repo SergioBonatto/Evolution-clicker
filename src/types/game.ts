@@ -9,6 +9,7 @@ export interface GameState {
   stageName: string;          // Nome do estágio atual
   prestigePoints: number;     // Pontos de prestígio acumulados
   completedMissions: string[]; // Missões concluídas
+  clickCount: number;         // Contador de cliques do usuário
 }
 
 export interface Upgrade {
