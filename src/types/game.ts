@@ -1,15 +1,15 @@
 import FixedPrecision from "fixed-precision";
 
 export interface GameState {
-  stage: number;              // Estágio atual (0 = Proteínas, 1 = Vírus, ...)
-  resource: FixedPrecision;   // Quantidade de recurso atual do estágio
-  energy: FixedPrecision;     // Energia acumulada ou equivalente genérico
-  upgrades: Upgrade[];        // Upgrades disponíveis/comprados
-  evolutionPoints: number;    // Pontos permanentes ganhos ao resetar de estágio
-  stageName: string;          // Nome do estágio atual
-  prestigePoints: number;     // Pontos de prestígio acumulados
-  completedMissions: string[]; // Missões concluídas
-  clickCount: number;         // Contador de cliques do usuário
+  stage: number;              // Current stage (0 = Proteins, 1 = Virus, ...)
+  resource: FixedPrecision;   // Current resource amount for the stage
+  energy: FixedPrecision;     // Accumulated energy or generic equivalent
+  upgrades: Upgrade[];        // Available/purchased upgrades
+  evolutionPoints: number;    // Permanent points earned when resetting stage
+  stageName: string;          // Name of the current stage
+  prestigePoints: number;     // Accumulated prestige points
+  completedMissions: string[]; // Completed missions
+  clickCount: number;         // User click counter
 }
 
 export interface Upgrade {
@@ -17,8 +17,8 @@ export interface Upgrade {
   name: string;
   baseCost: number;
   cost: FixedPrecision;
-  multiplier: number; // Multiplicador de ganho por recurso
-  quantity: number;   // Quantidade comprada
+  multiplier: number; // Resource gain multiplier
+  quantity: number;   // Amount purchased
 }
 
 export interface Mission {
