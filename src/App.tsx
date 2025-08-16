@@ -1,9 +1,20 @@
 import { useGame } from "./hooks/useGame";
 import FixedPrecision from "fixed-precision";
-import { useState } from "react";
+import { useState} from "react";
 import './App.css';
+import BurgerMenu from "./components/BurgerMenu";
+
+import { useTranslation } from 'react-i18next';
+import i18n from './i18n';
+
+const LANGUAGES = [
+  { code: 'pt', label: 'Português' },
+  { code: 'en', label: 'English' },
+  { code: 'es', label: 'Español' }
+];
 
 function App() {
+  const { t } = useTranslation();
   const {
     gameState,
     produce,
@@ -46,143 +57,102 @@ function App() {
   return (
     <div className={`min-h-screen evolutionary-bg evolutionary-bg-${stageTheme} relative transition-all duration-500`}>
       <div className="relative z-10 flex flex-col items-center p-6">
+  {/* Modern Burger Menu with options */}
+        <BurgerMenu
+          languages={LANGUAGES}
+          currentLanguage={i18n.language}
+          onLanguageChange={i18n.changeLanguage}
+        />
         {/* Title */}
         {/* Reset Button */}
         {/* <button
           onClick={resetGame}
           className="reset-btn mb-4"
           aria-label="Reset the game (erases all progress)"
-          style={{
-            fontSize: "0.95rem",
-            fontWeight: 500,
-            borderRadius: 8,
-            background: "#ef4444",
-            color: "#fff",
-            border: "none",
-            padding: "0.5rem 1.2rem",
-            marginBottom: 16,
-          }}
         >
           Reset Game
         </button> */}
 
-
         <div className="main-container">
-          {/* Painel Principal */}
+          {/* Main Panel */}
           <div className="main-panel">
             <div className="evolution-header mb-2">
-          <h1 className="evolution-title" style={{ fontSize: "2.2rem", fontWeight: 700, color: "#222", textShadow: "none", paddingTop: "3rem", letterSpacing: 0 }}>
-            Evolution Clicker
-          </h1>
-        </div>
-        {/* Stage Banner */}
-        <div className={`stage-banner stage-banner-${stageTheme} mb-2 animate-fade-in`}>
-          <div className="stage-label">Current Era</div>
-          <div className="stage-name">{gameState.stageName}</div>
-        </div>
+              <h1 className="evolution-title app-title">
+                {t('title')}
+              </h1>
+            </div>
+            {/* Stage Banner */}
+            <div className={`stage-banner stage-banner-${stageTheme} mb-2 animate-fade-in`}>
+              <div className="stage-label">{t('currentEra')}</div>
+              <div className="stage-name">{t(gameState.stageName)}</div>
+            </div>
             {/* Stats */}
             <div className="stats-panel mb-8">
               <div className="stat-grid">
                 <div className="main-stats">
                   <div className="stat-item primary-stat">
-                    <div className="stat-label">Resource</div>
+                    <div className="stat-label">{t('resource')}</div>
                     <div className="stat-value primary">{Math.floor(gameState.resource.toNumber()).toLocaleString()}</div>
-                    <div className="stat-unit">{producedResource}</div>
+                    <div className="stat-unit">{t(producedResource)}</div>
                   </div>
                   <div className="stat-item secondary-stat">
-                    <div className="stat-label">Energy</div>
+                    <div className="stat-label">{t('energy')}</div>
                     <div className="stat-value secondary">{Math.floor(gameState.energy.toNumber()).toLocaleString()}</div>
-                    <div className="stat-unit">Units</div>
+                    <div className="stat-unit">{t('units')}</div>
                   </div>
                 </div>
-                <div className="evolution-points-section">
-                  <div className="stat-label">Evolution Points</div>
-                  <div className="stat-value evolution">
-                    {gameState.evolutionPoints}
-                    <span style={{ fontSize: '0.85rem', color: '#059669', marginLeft: 6 }}>(+5% per point)</span>
-                  </div>
-                </div>
-                <div className="prestige-points-section">
-                  <div className="stat-label">Prestige Points</div>
-                  <div className="stat-value prestige">
-                    {gameState.prestigePoints}
-                    <span style={{ fontSize: '0.85rem', color: '#059669', marginLeft: 6 }}>(+5% per point)</span>
-                  </div>
-                </div>
+                        {gameState.evolutionPoints > 0 && (
+                          <div className="evolution-points-section">
+                            <div className="stat-label">{t('evolutionPoints')}</div>
+                            <div className="stat-value evolution">
+                              {gameState.evolutionPoints}
+                              <span className="evolution-bonus">({t('perPointBonus')})</span>
+                            </div>
+                          </div>
+                        )}
+                        {gameState.prestigePoints > 0 && (
+                          <div className="prestige-points-section">
+                            <div className="stat-label">{t('prestigePoints')}</div>
+                            <div className="stat-value prestige">
+                              {gameState.prestigePoints}
+                              <span className="prestige-bonus">({t('perPointBonus')})</span>
+                            </div>
+                          </div>
+                        )}
               </div>
               {/* Auto Production */}
               <div className="production-panel">
-                <div className="production-title">Auto Production</div>
+                <div className="production-title">{t('autoProduction')}</div>
                 <div className="production-stats">
                   <div className="production-item">
                     <span className="production-rate">
                       {autoProduction.perSecond.toNumber().toLocaleString(undefined, { maximumFractionDigits: 2 })}
                     </span>
-                    <span className="production-unit">per second</span>
+                    <span className="production-unit">{t('perSecond')}</span>
                   </div>
                 </div>
               </div>
-            </div>
-            {/* Click Counter */}
-            <div className="click-counter">
-              Clicks: {gameState.clickCount?.toLocaleString() ?? 0}
             </div>
             {/* Produce Button */}
             <button
               onClick={handleProduce}
               onKeyDown={(e) => e.key === "Enter" && handleProduce()}
               className={`main-action-btn main-action-btn-${stageTheme} mb-8 ${clickFeedback ? "animate-pulse" : ""}`}
-              aria-label={`Produce ${producedResource} to increase resources`}
+              aria-label={t('produce') + ` ${producedResource}`}
             >
-              Produce
+              <span>{t('produce')}</span>
+              {/* <span className="click-counter-inside">&nbsp;({t('clicks')}: {gameState.clickCount?.toLocaleString() ?? 0})</span> */}
             </button>
-            {/* Evolve Button */}
-            <button
-              onClick={handleEvolve}
-              onKeyDown={(e) => e.key === "Enter" && handleEvolve()}
-              disabled={gameState.resource.lt(new FixedPrecision(dynamicRequirement)) || !allEraMissionsComplete}
-              className={`evolution-btn ${gameState.resource.gte(new FixedPrecision(dynamicRequirement)) && allEraMissionsComplete ? "evolution-btn-ready" : "evolution-btn-disabled"} mb-8 ${evolveFeedback ? "animate-evolve" : ""}`}
-              aria-label={`Evolve to next era (requires ${dynamicRequirement.toLocaleString()} ${producedResource} and all missions complete)`}
-            >
-              Evolve to next era ({dynamicRequirement.toLocaleString()} {producedResource})
-            </button>
-            {/* Evolve requirements feedback */}
-            {(!allEraMissionsComplete || gameState.resource.lt(new FixedPrecision(dynamicRequirement))) && (
-              <div style={{ color: '#b91c1c', fontWeight: 500, marginBottom: 16, fontSize: '0.98rem' }}>
-                <span>To evolve, complete all era missions and produce at least {dynamicRequirement.toLocaleString()} {producedResource}.</span>
-                {!allEraMissionsComplete && (
-                  <div style={{ color: '#b91c1c', marginTop: 4 }}>
-                    Pending missions in this era.
-                  </div>
-                )}
-                {gameState.resource.lt(new FixedPrecision(dynamicRequirement)) && (
-                  <div style={{ color: '#b91c1c', marginTop: 4 }}>
-                    Insufficient resource.
-                  </div>
-                )}
-              </div>
-            )}
-            {/* Prestige Button */}
-            {gameState.stage >= 5 && (
-              <button
-                onClick={prestige}
-                onKeyDown={(e) => e.key === "Enter" && prestige()}
-                className="prestige-btn mb-8"
-                aria-label="Restart progress to earn prestige points"
-              >
-                Prestige (Earn {Math.floor(Math.log10(gameState.energy.toNumber()) / 2)} points)
-              </button>
-            )}
           </div>
           {/* Upgrades Panel */}
           <div className="upgrades-panel">
             <h2 className="upgrades-title">
-              Upgrades
+              {t('upgrades')}
             </h2>
             {upgradesByStage.map(({ stage, upgrades }) => (
-              <div key={stage} style={{ marginBottom: "2rem" }}>
-                <div className="upgrade-stage-title" style={{ fontWeight: 600, fontSize: "1.05rem", color: "#059669", marginBottom: 8 }}>
-                  {stage}
+              <div key={stage} className="upgrade-stage-block">
+                <div className="upgrade-stage-title">
+                  {t(stage)}
                 </div>
                 <div className="upgrades-grid">
                   {upgrades.map((upgrade) => (
@@ -192,7 +162,7 @@ function App() {
                     >
                       <div className="upgrade-header">
                         <div className="upgrade-name">
-                          {upgrade.name}
+                          {t(upgrade.name)}
                         </div>
                         <div className="upgrade-quantity">
                           ×{upgrade.quantity}
@@ -208,9 +178,9 @@ function App() {
                         onKeyDown={(e) => e.key === "Enter" && buyUpgrade(upgrade.id)}
                         disabled={gameState.energy.lt(upgrade.cost)}
                         className={`upgrade-buy-btn ${gameState.energy.gte(upgrade.cost) ? "upgrade-buy-enabled" : "upgrade-buy-disabled"}`}
-                        aria-label={`Buy ${upgrade.name} for ${upgrade.cost.toNumber().toLocaleString()} energy`}
+                        aria-label={`Buy ${t(upgrade.name)} for ${upgrade.cost.toNumber().toLocaleString()} ${t('energy')}`}
                       >
-                        <span className="upgrade-cost">{upgrade.cost.toNumber().toLocaleString()}</span> energy
+                        <span className="upgrade-cost">{upgrade.cost.toNumber().toLocaleString()}</span> {t('energy')}
                       </button>
                     </div>
                   ))}
@@ -218,48 +188,98 @@ function App() {
               </div>
             ))}
           </div>
-          {/* Missions Panel */}
-          {missions.length > 0 && (
-            <div className="missions-panel">
-              <h2 className="missions-title">
-                Missions
-              </h2>
-              <div className="missions-grid">
-                {missions.map((mission) => {
-                  const canComplete =
-                    ("resource" in mission.requirement &&
-                      typeof mission.requirement.resource === "number" &&
-                      gameState.resource.gte(new FixedPrecision(mission.requirement.resource))) ||
-                    ("upgrade" in mission.requirement &&
-                      typeof mission.requirement.quantity === "number" &&
-                      (() => {
-                        const upgrade = gameState.upgrades.find((u) => u.id === mission.requirement.upgrade);
-                        return !!upgrade && upgrade.quantity >= mission.requirement.quantity;
-                      })());
-                  return (
-                    <div
-                      key={mission.id}
-                      className="mission-card"
-                    >
-                      <div className="mission-description">
-                        {mission.description}
-                      </div>
-                      <div className="mission-reward">
-                        Reward: {mission.reward.energy ? `${mission.reward.energy} energy` : `${mission.reward.evolutionPoints} evolution points`}
-                      </div>
-                      <button
-                        onClick={() => completeMission(mission.id)}
-                        disabled={!canComplete}
-                        className={`mission-btn ${canComplete ? "mission-btn-enabled" : "mission-btn-disabled"}`}
-                      >
-                        Complete
-                      </button>
-                    </div>
-                  );
-                })}
+          {/* Missions Panel (always visible) */}
+          <div className="missions-panel">
+            <h2 className="missions-title">
+              {t('progressPanel')}
+            </h2>
+            {/* Evolve requirements feedback moved here */}
+            {(!allEraMissionsComplete || gameState.resource.lt(new FixedPrecision(dynamicRequirement))) && (
+              <div className="evolve-requirements-feedback mb-4">
+                <span>{t('toEvolve', { amount: dynamicRequirement.toLocaleString(), resource: t(producedResource) })}</span>
+                {!allEraMissionsComplete && (
+                  <div className="evolve-requirements-missions">
+                    {t('pendingMissions')}
+                  </div>
+                )}
+                {gameState.resource.lt(new FixedPrecision(dynamicRequirement)) && (
+                  <div className="evolve-requirements-resource">
+                    {t('insufficientResource')}
+                  </div>
+                )}
               </div>
-            </div>
-          )}
+            )}
+            {/* Evolve Button */}
+            <button
+              onClick={handleEvolve}
+              onKeyDown={(e) => e.key === "Enter" && handleEvolve()}
+              disabled={gameState.resource.lt(new FixedPrecision(dynamicRequirement)) || !allEraMissionsComplete}
+              className={`evolution-btn ${gameState.resource.gte(new FixedPrecision(dynamicRequirement)) && allEraMissionsComplete ? "evolution-btn-ready" : "evolution-btn-disabled"} mb-8 ${evolveFeedback ? "animate-evolve" : ""}`}
+              aria-label={t('evolveToNextEra') + ` (${dynamicRequirement.toLocaleString()} ${producedResource})`}
+            >
+              {t('evolveToNextEra')} ({dynamicRequirement.toLocaleString()} {t(producedResource)})
+            </button>
+            {/* Prestige Button */}
+            {gameState.stage >= 5 && (
+              <button
+                onClick={prestige}
+                onKeyDown={(e) => e.key === "Enter" && prestige()}
+                className="prestige-btn mb-8"
+                aria-label={t('prestige', { points: Math.floor(Math.log10(gameState.energy.toNumber()) / 2) })}
+              >
+                {t('prestige', { points: Math.floor(Math.log10(gameState.energy.toNumber()) / 2) })}
+              </button>
+            )}
+            {/* Highlighted missions section (only appears if there are missions) */}
+            {missions.length > 0 && (
+              <div className="missions-highlight-panel">
+                <div className="missions-highlight-title">
+                  {t('missions')}
+                </div>
+                <div className="missions-grid">
+                  {missions.map((mission) => {
+                    const canComplete =
+                      ("resource" in mission.requirement &&
+                        typeof mission.requirement.resource === "number" &&
+                        gameState.resource.gte(new FixedPrecision(mission.requirement.resource))) ||
+                      ("upgrade" in mission.requirement &&
+                        typeof mission.requirement.quantity === "number" &&
+                        (() => {
+                          const upgrade = gameState.upgrades.find((u) => u.id === mission.requirement.upgrade);
+                          return !!upgrade && upgrade.quantity >= mission.requirement.quantity;
+                        })());
+                    const rewardText = mission.reward.energy
+                      ? `${mission.reward.energy} ${t('energy')}`
+                      : `${mission.reward.evolutionPoints} ${t('evolutionPoints')}`;
+                    return (
+                      <div
+                        key={mission.id}
+                        className="mission-card"
+                      >
+                        <div className="mission-description">
+                          {t(mission.description.key, {
+                            ...mission.description.values,
+                            resource: mission.description.values.resource ? t(mission.description.values.resource) : undefined,
+                            upgrade: mission.description.values.upgrade ? t(mission.description.values.upgrade) : undefined,
+                          })}
+                        </div>
+                        <div className="mission-reward">
+                          {t('reward', { reward: rewardText })}
+                        </div>
+                        <button
+                          onClick={() => completeMission(mission.id)}
+                          disabled={!canComplete}
+                          className={`mission-btn ${canComplete ? "mission-btn-enabled" : "mission-btn-disabled"}`}
+                        >
+                          {t('complete')}
+                        </button>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>
