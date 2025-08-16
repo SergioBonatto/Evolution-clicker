@@ -1,4 +1,3 @@
-// Dados estáticos do jogo: estágios, requisitos, upgrades, missões, temas, etc.
 import FixedPrecision from "fixed-precision";
 import type { Upgrade } from "../types/game";
 
