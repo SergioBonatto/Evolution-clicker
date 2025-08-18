@@ -6,8 +6,6 @@ export interface LanguageSelectorProps {
   onChange: (lang: string) => void;
 }
 
-
-
 const LanguageSelector: React.FC<LanguageSelectorProps> = ({ languages, currentLanguage, onChange }) => {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);

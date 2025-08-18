@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import LanguageSelector from './LanguageSelector';
 import type { LanguageSelectorProps } from './LanguageSelector';
@@ -12,25 +12,41 @@ interface BurgerMenuProps {
   setTheme: (theme: 'light' | 'dark') => void;
 }
 
-
 const BurgerMenu: React.FC<BurgerMenuProps> = ({ languages, currentLanguage, onLanguageChange, onRequestReset, theme, setTheme }) => {
   const [open, setOpen] = useState(false);
   const { t } = useTranslation();
 
-  // Alterna tema
   const toggleTheme = () => {
-    setTheme(theme === 'dark' ? 'light' : 'dark');
+    const newTheme = theme === 'dark' ? 'light' : 'dark';
+    setTheme(newTheme);
+    try {
+      window.localStorage.setItem('theme', newTheme);
+    } catch (e) {
+      // Silently fail if localStorage is not available
+    }
   };
+
+  // Load saved theme on mount
+  useEffect(() => {
+    try {
+      const savedTheme = window.localStorage.getItem('theme');
+      if (savedTheme === 'dark' || savedTheme === 'light') {
+        setTheme(savedTheme);
+      }
+    } catch (e) {
+      // Silently fail if localStorage is not available
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   return (
     <div className="burger-menu-root">
       {open && (
         <div
           className="burger-overlay"
           onClick={() => setOpen(false)}
-          aria-label="Fechar menu"
+          aria-label="Close menu"
         />
       )}
-      {/* Painel do menu lateral */}
       <div
         className={`burger-menu-panel${open ? ' open' : ''}`}
         onClick={e => e.stopPropagation()}
@@ -38,7 +54,7 @@ const BurgerMenu: React.FC<BurgerMenuProps> = ({ languages, currentLanguage, onL
         <div className="burger-menu-header">
           <button
             className="burger-menu-close"
-            aria-label="Fechar menu"
+            aria-label="Close menu"
             onClick={() => setOpen(false)}
             type="button"
           >×</button>
@@ -50,7 +66,6 @@ const BurgerMenu: React.FC<BurgerMenuProps> = ({ languages, currentLanguage, onL
             currentLanguage={currentLanguage}
             onChange={onLanguageChange}
           />
-          {/* Alternância de tema estilizada */}
           <div className="theme-toggle-container mb-4">
             <button
               className="theme-toggle-btn w-full"
@@ -61,7 +76,7 @@ const BurgerMenu: React.FC<BurgerMenuProps> = ({ languages, currentLanguage, onL
             >
               <span className="theme-toggle-icon" aria-hidden="true">
                 {theme === 'dark' ? (
-                  // Ícone de sol
+                  /* Sun icon */
                   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <circle cx="12" cy="12" r="5" fill="currentColor" />
                     <g stroke="currentColor" strokeWidth="2">
@@ -76,7 +91,7 @@ const BurgerMenu: React.FC<BurgerMenuProps> = ({ languages, currentLanguage, onL
                     </g>
                   </svg>
                 ) : (
-                  // Ícone de lua
+                  /* Moon icon */
                   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M21 12.79A9 9 0 1111.21 3a7 7 0 109.79 9.79z" fill="currentColor" />
                   </svg>
@@ -87,7 +102,6 @@ const BurgerMenu: React.FC<BurgerMenuProps> = ({ languages, currentLanguage, onL
               </span>
             </button>
           </div>
-          {/* Reset Button */}
           <button
             onClick={onRequestReset}
             className="reset-btn w-full mb-2"
@@ -100,7 +114,7 @@ const BurgerMenu: React.FC<BurgerMenuProps> = ({ languages, currentLanguage, onL
       </div>
       <button
         className={`burger-menu-btn${open ? ' open' : ''}`}
-        aria-label="Abrir menu"
+        aria-label="Open menu"
         onClick={() => setOpen(!open)}
         type="button"
       >
