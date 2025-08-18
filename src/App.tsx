@@ -10,7 +10,8 @@ import i18n from './i18n';
 const LANGUAGES = [
   { code: 'pt', label: 'Português' },
   { code: 'en', label: 'English' },
-  { code: 'es', label: 'Español' }
+  { code: 'es', label: 'Español' },
+  { code: 'janja', label: 'Janja' }
 ];
 
 function App() {
