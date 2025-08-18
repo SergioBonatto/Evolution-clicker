@@ -1,9 +1,9 @@
 import { useGame } from "./hooks/useGame";
 import FixedPrecision from "fixed-precision";
-import { useState} from "react";
+import { useState, useEffect } from "react";
 import './App.css';
 import BurgerMenu from "./components/BurgerMenu";
-
+import ResetModal from "./components/ResetModal";
 import { useTranslation } from 'react-i18next';
 import i18n from './i18n';
 
@@ -27,7 +27,7 @@ function App() {
     autoProduction,
     upgradesByStage,
     stageTheme,
-    // resetGame,
+    resetGame,
     areEraMissionsComplete,
     evolutionRequirements,
   } = useGame();
@@ -35,7 +35,17 @@ function App() {
   // State for visual feedback
   const [clickFeedback, setClickFeedback] = useState(false);
   const [evolveFeedback, setEvolveFeedback] = useState(false);
+  // Modal de reset
+  const [showResetModal, setShowResetModal] = useState(false);
+  const [theme, setTheme] = useState<'light' | 'dark'>('light');
 
+  useEffect(() => {
+    if (theme === 'dark') {
+      document.body.classList.add('dark');
+    } else {
+      document.body.classList.remove('dark');
+    }
+  }, [theme]);
   // More aggressive evolution requirement and mission check
   const currentRequirement = evolutionRequirements[gameState.stage]?.min || 1e3;
   const dynamicRequirement = currentRequirement * Math.pow(3, gameState.stage + 1);
@@ -57,21 +67,30 @@ function App() {
   return (
     <div className={`min-h-screen evolutionary-bg evolutionary-bg-${stageTheme} relative transition-all duration-500`}>
       <div className="relative z-10 flex flex-col items-center p-6">
-  {/* Modern Burger Menu with options */}
+        {/* Modern Burger Menu with options */}
         <BurgerMenu
           languages={LANGUAGES}
           currentLanguage={i18n.language}
           onLanguageChange={i18n.changeLanguage}
+          onRequestReset={() => setShowResetModal(true)}
+          theme={theme}
+          setTheme={setTheme}
+        />
+        <ResetModal
+          open={showResetModal}
+          onCancel={() => setShowResetModal(false)}
+          onConfirm={() => {
+            setShowResetModal(false);
+            resetGame();
+          }}
+          theme={theme}
+          title={t('resetConfirmationTitle', 'Resetar Jogo?')}
+          message={t('resetConfirmation', 'Tem certeza que deseja resetar o jogo? Todo o progresso será perdido. Esta ação não pode ser desfeita.')}
+          cancelLabel={t('cancel', 'Cancelar')}
+          confirmLabel={t('confirm', 'Resetar')}
         />
         {/* Title */}
-        {/* Reset Button */}
-        {/* <button
-          onClick={resetGame}
-          className="reset-btn mb-4"
-          aria-label="Reset the game (erases all progress)"
-        >
-          Reset Game
-        </button> */}
+
 
         <div className="main-container">
           {/* Main Panel */}

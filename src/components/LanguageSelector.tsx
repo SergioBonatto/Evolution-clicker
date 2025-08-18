@@ -29,21 +29,20 @@ const LanguageSelector: React.FC<LanguageSelectorProps> = ({ languages, currentL
       ref={ref}
     >
       <button
-        className="language-selector-select language-selector-dropdown-btn"
+        className="language-selector-select language-selector-dropdown-btn theme-toggle-btn w-full h-12 mb-4"
         aria-haspopup="listbox"
         aria-expanded={open}
         onClick={() => setOpen(o => !o)}
         type="button"
       >
         <span className="language-selector-current">
-          {/* Bandeira opcional: <span className={`fi fi-${current?.code}`}></span> */}
           {current?.label || currentLanguage}
         </span>
         <span className="language-selector-arrow" aria-hidden>▼</span>
       </button>
       {open && (
         <ul
-          className="language-selector-dropdown"
+          className="language-selector-dropdown w-full"
           role="listbox"
         >
           {languages.map(lang => (
@@ -64,7 +63,6 @@ const LanguageSelector: React.FC<LanguageSelectorProps> = ({ languages, currentL
                 }
               }}
             >
-              {/* Bandeira opcional: <span className={`fi fi-${lang.code}`}></span> */}
               {lang.label}
             </li>
           ))}
