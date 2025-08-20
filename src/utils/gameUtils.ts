@@ -107,7 +107,7 @@ export function prestige(state: GameState): GameState {
 
   // Calcular produção automática total atual
   const totalAuto = state.upgrades.reduce((acc, u) => acc + u.quantity, 0);
-  const autoToKeep = Math.floor(totalAuto * 0.01); // 10% arredondado para baixo
+  const autoToKeep = Math.floor(totalAuto * 0.05); // 5% arredondado para baixo
 
   // Gerar upgrades iniciais com 10% da produção automática
   const baseUpgrades = stageUpgrades[0].map((u, idx) => {
