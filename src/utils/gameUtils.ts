@@ -13,8 +13,11 @@ export function getMultiplier(state: GameState): FixedPrecision {
   for (const u of state.upgrades) {
     mult = mult.add(new FixedPrecision(u.multiplier - 1).mul(new FixedPrecision(u.quantity)));
   }
+  // Bônus de pontos de evolução (mantido)
   mult = mult.add(new FixedPrecision(state.evolutionPoints).mul(new FixedPrecision(0.05)));
-  mult = mult.mul(new FixedPrecision(1 + 0.05 * state.prestigePoints));
+  // Bônus de prestígio: fórmula levemente exponencial, máximo 25% por ponto
+  const prestigeBonus = Math.min(0.05 * Math.pow(state.prestigePoints, 1.2), 0.25 * state.prestigePoints);
+  mult = mult.mul(new FixedPrecision(1 + prestigeBonus));
   return mult;
 }
 
@@ -29,12 +32,14 @@ export function getAutoProductionPerSecond(state: GameState): FixedPrecision {
 
 // Production per click
 export function produce(state: GameState): GameState {
-  const amount = new FixedPrecision(1).mul(getMultiplier(state));
+  // O botão de produzir gera uma vez extra por ponto de prestígio
+  const clickCount = 1 + (state.prestigePoints || 0);
+  const amount = new FixedPrecision(1).mul(getMultiplier(state)).mul(new FixedPrecision(clickCount));
   return {
     ...state,
     resource: new FixedPrecision(state.resource).add(amount),
     energy: new FixedPrecision(state.energy).add(amount),
-    clickCount: (state.clickCount || 0) + 1,
+    clickCount: (state.clickCount || 0) + clickCount,
   };
 }
 
@@ -99,12 +104,27 @@ export function evolve(state: GameState): GameState {
 export function prestige(state: GameState): GameState {
   if (state.stage < 5) return state;
   const prestigePointsGained = Math.floor(Math.log10(state.energy.toNumber()) / 2);
+
+  // Calcular produção automática total atual
+  const totalAuto = state.upgrades.reduce((acc, u) => acc + u.quantity, 0);
+  const autoToKeep = Math.floor(totalAuto * 0.01); // 10% arredondado para baixo
+
+  // Gerar upgrades iniciais com 10% da produção automática
+  const baseUpgrades = stageUpgrades[0].map((u, idx) => {
+    // Distribuir autoToKeep proporcionalmente entre upgrades automáticos
+    // Aqui, para simplificar, damos tudo para o primeiro upgrade automático
+    if (idx === 0 && autoToKeep > 0) {
+      return { ...u, quantity: autoToKeep };
+    }
+    return { ...u, quantity: 0 };
+  });
+
   return {
     stage: 0,
     stageName: stages[0],
     resource: new FixedPrecision(0),
     energy: new FixedPrecision(0),
-    upgrades: stageUpgrades[0].map((u) => ({ ...u })),
+    upgrades: baseUpgrades,
     evolutionPoints: state.evolutionPoints,
     prestigePoints: state.prestigePoints + prestigePointsGained,
     completedMissions: state.completedMissions,
